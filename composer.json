@@ -1,6 +1,6 @@
 {
     "name": "arcane/arcane",
-    "description": "The Arcane Project.",
+    "description": "The Arcane Project",
     "version": "0.1",
     "type": "library",
     "keywords": [
