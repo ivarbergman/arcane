@@ -28,8 +28,8 @@
         "ext-spl": "*"
     },
     "autoload": {
-        "psr-0": {
-            "Arcane":"arcane"
+        "psr-4": {
+            "Arcane":"src"
         }
     }
 }
