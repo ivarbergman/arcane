@@ -33,9 +33,11 @@ class ClassIterator extends \FilterIterator
 
   public function accept()
   {
-    $c = parent::current();
+        $c = parent::current();
     if ($c && preg_match('/^[A-Z].*\.php$/', $c->getBasename()))
-      return true;
+        {
+            return true;
+        }
     return false;
   }
 
@@ -45,7 +47,7 @@ class ClassIterator extends \FilterIterator
     $c = parent::current();
     if ($c instanceof \SplFileInfo)
       {
-	$file = substr($c->getPathname(),0, -1*(strlen($c->getExtension())+1));
+	    $file = substr($c->getPathname(),0, -1*(strlen($c->getExtension())+1));
 	$depth = $i->getDepth() + $this->nsDepth+1;
 	$n = preg_split('/[\/]/',$file);
 	$n = array_slice($n, count($n)-$depth);

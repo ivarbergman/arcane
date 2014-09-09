@@ -16,16 +16,16 @@ class MReflectionClass extends \ReflectionClass
 	    $this->code = file_get_contents($fn);
 	  }
       }
-      
-    return $this->code;      
+
+    return $this->code;
   }
 
-  public function getMethod(string $name)
+  public function getMethod($name)
   {
 
   }
 
-  public function getMethods(string $name)
+  public function getMethods($filter = NULL)
   {
 
   }

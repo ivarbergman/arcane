@@ -2,9 +2,9 @@
 
 namespace arcane\db;
 
-use \arcane\DIMgr;
+use \arcane\di\DIMgr;
 
-trait DI  
+trait DI
 {
   use \arcane\di\DI;
 

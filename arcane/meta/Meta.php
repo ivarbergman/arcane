@@ -10,12 +10,13 @@ trait Meta
   }
   public static function __meta()
   {
-    $m = ClassLoader::getMetaClass(get_called_class());
+echo "__meta".PHP_EOL;
+    $m = \arcane\classloader\ClassLoader::getMetaClass(get_called_class());
     return $m;
   }
   public static function __interfaces()
   {
-    $m = static::__meta();    
+    $m = static::__meta();
     return $m->getInterfaceNames();
   }
   public static function __parent()
@@ -46,7 +47,7 @@ trait Meta
   }
   public static function __traits()
   {
-    $m = static::__meta();    
+    $m = static::__meta();
     return $m->getTraitNames();
   }
   public static function __hash()

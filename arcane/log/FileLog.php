@@ -5,7 +5,7 @@ namespace arcane\log;
 class FileLog extends \arcane\di\DIService implements Log
 {
 
-  private $file;
+  private $file = "/tmp/arcane.log";
   private $fp;
 
   public function __construct()
@@ -29,15 +29,20 @@ class FileLog extends \arcane\di\DIService implements Log
   }
 
   protected function write($mix, $level)
-  {
-    $out = $this->format($mix);
-    fwrite($this->fp, $out);
-    fflush($this->fp);
-  }
+    {
+        $e = new \Exception();
+        $source = $e->getTrace()[1];
+        $out = $source['file'] . ' ' . $source['line'].' : ';
+        $out .= $this->format($mix).PHP_EOL;
+        $this->open();
+        fwrite($this->fp, $out);
+        fflush($this->fp);
+        $this->close();
+    }
 
   protected function isOpen()
   {
-    if (!is_resource($this->fp))
+    if (!isset($this->fp) || !is_resource($this->fp))
       {
 	return false;
       }

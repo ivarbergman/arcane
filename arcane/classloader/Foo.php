@@ -10,6 +10,9 @@ class Foo implements \Serializable
 {
   private $v;
   use \arcane\meta\Meta;
+  use \arcane\log\DI;
+  use \arcane\db\DI;
+  use \arcane\auth\DI;
 
 /**
  * Document for the test method

@@ -29,7 +29,7 @@ class SplClassLoader
     /**
      * Creates a new <tt>SplClassLoader</tt> that loads classes of the
      * specified namespace.
-     * 
+     *
      * @param string $ns The namespace to use.
      */
     public function __construct($ns = null, $includePath = null)
@@ -40,7 +40,7 @@ class SplClassLoader
 
     /**
      * Sets the namespace separator used by classes in the namespace of this class loader.
-     * 
+     *
      * @param string $sep The separator to use.
      */
     public function setNamespaceSeparator($sep)
@@ -60,7 +60,7 @@ class SplClassLoader
 
     /**
      * Sets the base include path for all class files in the namespace of this class loader.
-     * 
+     *
      * @param string $includePath
      */
     public function setIncludePath($includePath)
@@ -85,11 +85,11 @@ class SplClassLoader
      */
     public function getRootPath()
     {
-      $path = $this->_includePath;
-      if ($this->_ns)
+        $path = $this->_includePath;
+        if ($this->_ns)
 	{
-	  $path .= DIRECTORY_SEPARATOR . 
-	    str_replace($this->_nsSeparator, DIRECTORY_SEPARATOR, $this->_ns);
+            $path .= DIRECTORY_SEPARATOR .
+                str_replace($this->_nsSeparator, DIRECTORY_SEPARATOR, $this->_ns);
 	}
 
         return $path;
@@ -102,13 +102,13 @@ class SplClassLoader
      */
     public function getNamespace()
     {
-      return $this->_ns;
+        return $this->_ns;
     }
 
 
     /**
      * Sets the file extension of class files in the namespace of this class loader.
-     * 
+     *
      * @param string $fileExtension
      */
     public function setFileExtension($fileExtension)
@@ -143,37 +143,35 @@ class SplClassLoader
     }
 
     /**
-     * 
+     *
      */
     public function knows($classname)
     {
-
-	    $result = strpos($classname, $this->_ns) === 0;      
-	    echo $result ? 'KNOWS':'!KNOWS';
-	    return $result;
+        $result = strpos($classname, $this->_ns) === 0;
+        return $result;
     }
 
     public function toFilename($classname)
     {
-      $name = str_replace($this->_nsSeparator, DIRECTORY_SEPARATOR, $classname) .$this->getFileExtension();
-      return $name;
-      
+        $name = str_replace($this->_nsSeparator, DIRECTORY_SEPARATOR, $classname) .$this->getFileExtension();
+        return $name;
+
     }
 
     public function getFilepath($classname)
     {
-      $name = str_replace($this->_nsSeparator, DIRECTORY_SEPARATOR, $classname) .$this->getFileExtension();
-      $path = $this->_includePath.DIRECTORY_SEPARATOR.$name;
-      return $path;
-      
+        $name = str_replace($this->_nsSeparator, DIRECTORY_SEPARATOR, $classname) .$this->getFileExtension();
+        $path = $this->_includePath.DIRECTORY_SEPARATOR.$name;
+        return $path;
+
     }
 
     public function toClassname($filename)
     {
-      $name = str_replace(DIRECTORY_SEPARATOR, $this->_nsSeparator, $filename);
-      $name = str_replace($this->getFileExtension(), '', $name);
-      $name = preg_replace('/^[.\/]/', '', $name);
-      return $name;
+        $name = str_replace(DIRECTORY_SEPARATOR, $this->_nsSeparator, $filename);
+        $name = str_replace($this->getFileExtension(), '', $name);
+        $name = preg_replace('/^[.\/]/', '', $name);
+        return $name;
     }
 
     /**
@@ -184,8 +182,8 @@ class SplClassLoader
      */
     public function loadClass($className)
     {
-      //echo "SplClassLoader::loadClass($className)".PHP_EOL;
-      if (null === $this->_ns || $this->_ns.$this->_nsSeparator === substr($className, 0, strlen($this->_ns.$this->_nsSeparator))) {
+        //echo "SplClassLoader::loadClass($className)".PHP_EOL;
+        if (null === $this->_ns || $this->_ns.$this->_nsSeparator === substr($className, 0, strlen($this->_ns.$this->_nsSeparator))) {
             $fileName = '';
             $namespace = '';
             if (false !== ($lastNsPos = strripos($className, $this->_nsSeparator))) {
