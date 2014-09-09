@@ -1,0 +1,35 @@
+{
+    "name": "arcane/arcane",
+    "description": "The Arcane Project.",
+    "version": "0.1",
+    "type": "library",
+    "keywords": [
+        "arcane",
+        "classloader",
+        "psr-0"
+    ],
+    "homepage": "https://github.com/ivarbergman/arcane",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivar Bergman",
+            "email": "ivar@ivarbergman.se",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ivarbergman/arcane/issues"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "ext-dom": "*",
+        "ext-reflection": "*",
+        "ext-spl": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Arcane":"arcane"
+        }
+    }
+}
