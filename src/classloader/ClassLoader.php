@@ -1,9 +1,9 @@
 <?php
 namespace arcane\classloader;
 
-include_once("SplClassLoader.php");
+include_once("Psr4AutoloaderClass.php");
 
-class ClassLoader extends SplClassLoader
+class ClassLoader extends Psr4AutoloaderClass
 {
 
     private static $meta;
@@ -14,7 +14,8 @@ class ClassLoader extends SplClassLoader
     private static $parameters;
 
     private $cacheFile = '/tmp/cacheFile.dat';
-
+    private $prefix;
+    private $base_dir;
 
     /**
      * Creates a new <tt>SplClassLoader</tt> that loads classes of the
@@ -22,9 +23,21 @@ class ClassLoader extends SplClassLoader
      *
      * @param string $ns The namespace to use.
      */
-    public function __construct($ns = null, $includePath = null)
+    public function __construct($prefix, $base_dir)
     {
-        parent::__construct($ns, $includePath);
+        $this->prefix = $prefix;
+        $this->base_dir = $base_dir;
+        $this->addNamespace($prefix, $base_dir);
+    }
+
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    public function getBaseDir()
+    {
+        return $this->base_dir;
     }
 
     public static function meta($classname)

@@ -23,11 +23,11 @@ class ClassIterator extends \FilterIterator
   {
 
     $this->classloader = $classloader;
-    $it = new \RecursiveDirectoryIterator($this->classloader->getRootPath());
+    $it = new \RecursiveDirectoryIterator($this->classloader->getBaseDir());
     $it = new \RecursiveIteratorIterator($it);
 
     parent::__construct($it);
-    $this->ns = $this->classloader->getNamespace();
+    $this->ns = $this->classloader->getPrefix();
     $this->nsDepth = count(preg_split('/[\\\]/', $this->ns, null, PREG_SPLIT_NO_EMPTY));
   }
 

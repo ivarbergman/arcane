@@ -4,20 +4,22 @@ namespace arcane\di;
 
 class DIMgr
 {
-
-    public static function instance()
+    private $classloader;
+    public static function instance($classloader = null)
     {
         if (!self::$instance)
         {
-	    self::$instance = new static();
+
+	    self::$instance = new static($classloader);
         }
         return self::$instance;
     }
 
-    public function register($cl, $instance)
+    public function register($instance)
     {
         $classname = get_class($instance);
-        $meta = \arcane\classloader\ClassLoader::getMetaClass($classname);
+
+        $meta = $this->classloader->getMetaClass($classname);
         if (!$meta)
         {
             throw new \Exception("Could not find Meta class fro $classname");
@@ -39,9 +41,10 @@ class DIMgr
 
     private $map;
     private static $instance;
-    private function __construct()
+    private function __construct($classloader)
     {
         $this->map = [];
+        $this->classloader = $classloader;
     }
     private function __clone() { }
 

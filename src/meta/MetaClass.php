@@ -3,7 +3,7 @@
 namespace arcane\meta;
 use \SplFileInfo;
 use \ReflectionClass;
-use \arcane\classloader\SplClassLoader;
+use \arcane\classloader\ArcaneLoader;
 
 class MetaClass implements \Serializable
 {
@@ -134,8 +134,13 @@ class MetaClass implements \Serializable
         }
     }
 
-    public function file()
+    public function file($file = null)
     {
+        if ($file)
+        {
+            $this->file = $file;
+            return ;
+        }
         if (isset($this->file))
         {
             return $this->file;
@@ -143,8 +148,7 @@ class MetaClass implements \Serializable
         $cl = $this->classloader();
         if ($cl)
         {
-            $path = $cl->getFilepath($this->name);
-            $path = $this->name;
+            $path = $cl->hasClass($this->name);
             if (!file_exists($path))
             {
                 return false;
@@ -170,10 +174,10 @@ class MetaClass implements \Serializable
         //print_r($cls);
         foreach ($cls as $idx => $al)
         {
-            if (is_array($al) && $al[0] instanceof SplClassLoader)
+            if (is_array($al) && $al[0] instanceof ArcaneLoader)
             {
                 $cl = $al[0];
-                if ($cl->knows($this->name))
+                if ($cl->hasClass($this->name))
                 {
  		    //echo get_class($cl) ." knows " . $this->name;
                     return $cl;
@@ -248,12 +252,14 @@ class MetaClass implements \Serializable
     public function serialize()
     {
         $pathname = $this->file->getPathname();
+        return serialize([$pathname, $this->hash,$this->name, $this->methods]);
         return serialize([$pathname, $this->hash,$this->name, $this->code,$this->methods]);
     }
 
     public function unserialize($str)
     {
         list($pathname, $this->hash,$this->name, $this->code,$this->methods ) = unserialize($str);
+        list($pathname, $this->hash,$this->name, $this->methods ) = unserialize($str);
         $this->file = new SplFileInfo($pathname);
     }
 

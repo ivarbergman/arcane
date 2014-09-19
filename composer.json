@@ -27,9 +27,12 @@
         "ext-reflection": "*",
         "ext-spl": "*"
     },
+    "require-dev": {
+	"phpunit/phpunit": "4.2.*"
+    },
     "autoload": {
         "psr-4": {
-            "Arcane":"src"
+            "arcane\\":"src"
         }
     }
 }

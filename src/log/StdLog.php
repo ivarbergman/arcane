@@ -28,7 +28,7 @@ class StdLog implements Log
   protected function write($mix, $level)
   {
     $out = $this->format($mix);
-    error_log($out);
+    trigger_error($out, $level);
   }
 
   protected function format($mix)
