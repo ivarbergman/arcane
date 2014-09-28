@@ -9,7 +9,10 @@ class DIMgr
     {
         if (!self::$instance)
         {
-
+            if ( ! $classloader)
+            {
+                $classloader = \arcane\classloader\ArcaneLoader::instance();
+            }
 	    self::$instance = new static($classloader);
         }
         return self::$instance;
@@ -37,6 +40,12 @@ class DIMgr
         {
 	    return $this->map[$interface];
         }
+    }
+
+    public static function get($interface)
+    {
+        $dim = self::instance();
+        return $dim->find($interface);
     }
 
     private $map;

@@ -8,5 +8,6 @@ interface Db
 
   public function execute($sql);
   public function query($sql);
+  public function fetch($sql);
 
 }

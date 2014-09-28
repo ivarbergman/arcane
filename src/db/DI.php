@@ -6,7 +6,7 @@ use \arcane\di\DIMgr;
 
 trait DI
 {
-  use \arcane\di\DI;
+    use \arcane\di\DI;
 
   private static $db;
   public static function injectDb(Db $db)

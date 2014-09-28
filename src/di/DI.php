@@ -2,4 +2,7 @@
 
 namespace arcane\di;
 
-trait DI { }
+trait DI {
+
+
+ }

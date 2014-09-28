@@ -6,7 +6,7 @@ use \arcane\di\DIMgr;
 
 trait DI  
 {
-  use \arcane\di\DI;
+  use \arcane\di\DITrait;
 
   private static $auth;
   public static function injectAuth(Auth $auth)

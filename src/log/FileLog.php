@@ -2,33 +2,60 @@
 
 namespace arcane\log;
 
-class FileLog extends \arcane\di\DIService implements Log
+class FileLog implements Log
 {
 
-  private $file = "/tmp/arcane.log";
-  private $fp;
+    use \arcane\config\DI;
 
-  public function __construct()
-  {
-    
-  }
+    private $file = "/tmp/arcane.log";
+    private $fp;
 
-  public function log($mix)
-  {
-    $this->write($mix, E_USER_WARNING);
-  }
+    public function __construct($file = null)
+    {
+        if ($file)
+        {
+            $this->setFile($file);
+        }
+        else
+        {
+            $config = $this->config()->get('log');
+            if ($config)
+            {
+                $this->loadConfig($config);
+            }
+        }
+    }
 
-  public function error($mix)
-  {
-    $this->write($mix, E_USER_ERROR);
-  }
+    public function loadConfig($config)
+    {
+        if (isset($config['file']))
+        {
+            $this->setFile($config['file']);
+        }
+    }
 
-  public function dbg($mix)
-  {
-    $this->write($mix, E_USER_NOTICE);
-  }
+    public function setFile($file)
+    {
+        echo "setFile($file)";
+        $this->file = $file;
+    }
 
-  protected function write($mix, $level)
+    public function log($mix)
+    {
+        $this->write($mix, E_USER_WARNING);
+    }
+
+    public function error($mix)
+    {
+        $this->write($mix, E_USER_ERROR);
+    }
+
+    public function dbg($mix)
+    {
+        $this->write($mix, E_USER_NOTICE);
+    }
+
+    protected function write($mix, $level)
     {
         $e = new \Exception();
         $source = $e->getTrace()[1];
@@ -40,36 +67,36 @@ class FileLog extends \arcane\di\DIService implements Log
         $this->close();
     }
 
-  protected function isOpen()
-  {
-    if (!isset($this->fp) || !is_resource($this->fp))
-      {
-	return false;
-      }
-    $a = fstat($this->fp);
-    return $a["nlink"] > 0;
-  }
+    protected function isOpen()
+    {
+        if (!isset($this->fp) || !is_resource($this->fp))
+        {
+            return false;
+        }
+        $a = fstat($this->fp);
+        return $a["nlink"] > 0;
+    }
 
-  protected function open()
-  {
-    if (!$this->isOpen())
-      {
-	$this->fp = fopen($this->file, "a");
-      } 
-  }
+    protected function open()
+    {
+        if (!$this->isOpen())
+        {
+            $this->fp = fopen($this->file, "a");
+        }
+    }
 
-  protected function close()
-  {
-    if ($this->isOpen())
-      {
-	fclose($this->fp);
-	unset($this->fp);
-      }
-  }
+    protected function close()
+    {
+        if ($this->isOpen())
+        {
+            fclose($this->fp);
+            unset($this->fp);
+        }
+    }
 
-  protected function format($mix)
-  {
-    return print_r($mix, true);
-  }
+    protected function format($mix)
+    {
+        return print_r($mix, true);
+    }
 
 }
