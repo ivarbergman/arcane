@@ -105,14 +105,20 @@ class MySqlDb implements Db
             {
                 foreach ($value as $name1 => $value1)
                 {
-                    $stmt->bindParam(":{$name1}", $value1);
+                    if ($this->testParameterName($sql, $name1))
+                    {
+                        $stmt->bindParam(":{$name1}", $value1);
+                    }
                 }
             }
             else if (is_object($value))
             {
                 foreach ($value as $name1 => $value1)
                 {
-                    $stmt->bindParam(":{$name1}", $value1);
+                    if ($this->testParameterName($sql, $name1))
+                    {
+                        $stmt->bindParam(":{$name1}", $value1);
+                    }
                 }
             }
             else
@@ -124,6 +130,10 @@ class MySqlDb implements Db
         return $stmt;
     }
 
+    private function testParameterName($sql, $name)
+    {
+        return preg_match("/:$name /", $sql);
+    }
 
     public function uuid()
     {
