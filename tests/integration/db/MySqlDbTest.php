@@ -44,6 +44,8 @@ class MySqlDbTest extends DbBase
     {
         $obj = new StdClass();
         $obj->id = 1;
+        $obj->ida = 1;
+        $obj->idb = 1;
 
         $sql = "SELECT * FROM arcanetest WHERE id > :id  AND id >= :id ";
         $r = DB::fetch($sql, $obj);
