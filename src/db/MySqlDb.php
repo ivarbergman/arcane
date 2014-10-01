@@ -132,7 +132,10 @@ class MySqlDb implements Db
 
     private function testParameterName($sql, $name)
     {
-        return preg_match("/:$name /", $sql);
+        $this->log()->dbg("testParameterName($sql, $name)");
+        $result = preg_match("/:{$name}[^a-z0-9_]?/", $sql);
+        $this->log()->dbg($result);
+        return $result;
     }
 
     public function uuid()

@@ -65,4 +65,27 @@ class MySqlDbTest extends DbBase
         $id = DB::lastInsertId();
         $this->assertGreaterThan(0, $id);
     }
+
+    public function testInsertObject()
+    {
+        $message = new StdClass();
+        $message->id = 0;
+        $message->foo = 'footest';
+        $sql = "INSERT INTO arcanetest SET foo = :foo";
+        $r = DB::execute($sql, $message);
+        $id = DB::lastInsertId();
+        $this->assertGreaterThan(0, $id);
+    }
+
+    public function testInsertObjectSqlWithSpace()
+    {
+        $message = new StdClass();
+        $message->id = 0;
+        $message->foo = 'footest';
+        $sql = "INSERT INTO arcanetest SET foo = :foo ";
+        $r = DB::execute($sql, $message);
+        $id = DB::lastInsertId();
+        $this->assertGreaterThan(0, $id);
+    }
+
 }
