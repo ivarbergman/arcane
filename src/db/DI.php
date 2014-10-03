@@ -14,7 +14,7 @@ trait DI
     self::$db = $db;
   }
 
-  public function db()
+  public static function db()
   {
     if (!isset(self::$db))
       {

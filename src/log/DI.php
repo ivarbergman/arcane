@@ -14,7 +14,7 @@ trait DI
         self::$log = $log;
     }
 
-    public function log()
+    public static function log()
     {
         if (!isset(self::$log))
         {
