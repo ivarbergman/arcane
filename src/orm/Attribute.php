@@ -8,16 +8,21 @@ class Attribute
 
   private $name;
   private $type;
+  private $precision;
+  private $null;
+  private $key;
+  private $auto_increment;
+
   private $value;
   private $entity;
 
-  public function __construct($entity, $name, $type, $value = null)
+  public function __construct($entity, $name, $type)
   {
+    $this->entity = $entity;
     $this->name = $name;
     $this->type = $type;
-    $this->value = $value;
-    $this->entity = $entity;
   }
+
 
   public function entity()
   {
@@ -39,9 +44,24 @@ class Attribute
     if (isset($v))
       {
 	$this->value = $v;
-	return $this; 
+	return $this;
       }
     return $this->value;
+  }
+
+  public function get()
+  {
+      if ($this->entity->__isRecord())
+      {
+	return $this->value;
+      }
+    return $this;
+  }
+
+  public function set($value)
+  {
+      $this->value = $value;
+      return $this;
   }
 
   public function export()

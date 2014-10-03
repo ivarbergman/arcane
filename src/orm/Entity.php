@@ -14,7 +14,7 @@ trait Entity
   public function delete() {}
   public function feed() {}
 
-  public function name($name = null) 
+  public function name($name = null)
   {
     if (isset($name))
       {
@@ -24,7 +24,7 @@ trait Entity
     return $this->name;
   }
 
-  public function export() 
+  public function export()
   {
     $str = "Export: ".PHP_EOL;
     foreach ($this->__attr as $a)
@@ -33,15 +33,22 @@ trait Entity
       }
     $str .= "Conditions: ".PHP_EOL;
     foreach ($this->conditions as $c)
-      {	  
+      {
 	$str .= $c->export().PHP_EOL;
       }
     return $str;
   }
 
+  public function add($attribute)
+  {
+      $this->__attr[$attribute->name] = $attribute;
+      return $this->__attr[$attribute->name];
+  }
+
   private function attribute($name, $type)
   {
     $this->__attr[$name] = new Attribute($this, $name,$type);
+    return $this->__attr[$name];
   }
 
   public function condition($lh, $op, $rh)

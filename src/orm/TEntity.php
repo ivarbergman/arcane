@@ -6,14 +6,20 @@ trait TEntity
 {
 
   private $conditions = [];
+  private $isRecord = false;
 
-  public function save() {}
-  public function insert() {}
-  public function update() {}
-  public function delete() {}
-  public function feed() {}
+  public function feed($values)
+  {
+      if (is_array($values) && count($values))
+      {
+          foreach ($values as $name => $value)
+          {
+              $this->___set($name, $value);
+          }
+      }
+  }
 
-  public function export() 
+  public function export()
   {
     $str = "Export: ".PHP_EOL;
     foreach ($this->__attr as $a)
@@ -22,37 +28,61 @@ trait TEntity
       }
     $str .= "Conditions: ".PHP_EOL;
     foreach ($this->conditions as $c)
-      {	  
+      {
 	$str .= $c->export().PHP_EOL;
       }
     return $str;
   }
 
-  private function attribute($name, $type)
+  public function __isRecord()
   {
-    $this->$name = new Attribute($this, $name,$type);
-    $this->__attr[$name] = $this->$name;
+      return $this->isRecord;
+  }
+  public function __attribute($var)
+  {
+      if (is_string($var))
+      {
+          return $this->__attr[$var];
+      }
+      if ($var instanceof Attribute)
+      {
+          $this->__attr[$var->name] = $var;
+          return $this->__attr[$var->name];
+      }
+      return $this;
   }
 
-  public function condition($lh, $op, $rh)
+  public function __condition($lh, $op, $rh)
   {
     $this->conditions[] = new Condition($lh, $op, $rh);
   }
 
   public function __set($name, $value)
   {
-    echo "__set($name, $value)".PHP_EOL;
+    return $this->___set($name, $value);
+  }
+  public function ___set($name, $value)
+  {
     $m = "set$name";
-    if (method_exists($this, "set$name"))
+    if (method_exists($this, $m))
       {
-	$this->$m($value);
+          return $this->$m($value);
       }
+    return $this->__attribute($name)->set($value);
   }
 
   public function __get($name)
   {
-    echo "__get($name)".PHP_EOL;
-    return $this->$name;
+      return $this->___get($name);
+  }
+  public function ___get($name)
+  {
+    $m = "get$name";
+    if (method_exists($this, $m))
+      {
+          return $this->$m();
+      }
+    return $this->__attribute($name)->get();
   }
 
   protected $__attr;
