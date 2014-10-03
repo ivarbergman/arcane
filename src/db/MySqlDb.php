@@ -132,9 +132,7 @@ class MySqlDb implements Db
 
     private function testParameterName($sql, $name)
     {
-        $this->log()->dbg("testParameterName($sql, $name)");
         $result = preg_match("/:{$name}[^a-z0-9_]?/", $sql);
-        $this->log()->dbg($result);
         return $result;
     }
 

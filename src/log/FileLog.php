@@ -36,7 +36,6 @@ class FileLog implements Log
 
     public function setFile($file)
     {
-        echo "setFile($file)";
         $this->file = $file;
     }
 
