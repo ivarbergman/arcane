@@ -53,7 +53,7 @@ $stdout->setLevel(E_USER_NOTICE);
 
 // Execute a db statement, response should go into the db log.
 $stdout->dbg( DB::fetch('SHOW VARIABLES LIKE "max_connections"')  );
-$stdout->dbg( DB::fetch('SHOW VARIABLE LIKE "max_connections"')  );
+$stdout->dbg( DB::fetch('SHOW SOME SYNTAX ERROR')  );
 
 
 // Use the STDOUT logger
