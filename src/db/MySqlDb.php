@@ -20,8 +20,6 @@ class MySqlDb implements Db
         if ( ! isset(self::$db))
         {
 
-            $this->log()->dbg("MySqlDb connect dsn: ");
-
             $user = $this->config()->get("db", "user");
             $pass = $this->config()->get("db", "password");
             $host = $this->config()->get("db", "host");
@@ -34,10 +32,13 @@ class MySqlDb implements Db
                 self::$db = new \PDO($dsn, $user, $pass, array(
                                          \PDO::ATTR_PERSISTENT => true
                                          ));
+
+                self::$db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+
             } catch (Exception $e)
               {
-                  $this->log()->dbg("MySqlDb connect error: dsn: " . $dsn);
-                  $this->log()->dbg($e);
+                  $this->log()->log("MySqlDb connect error: dsn: " . $dsn);
+                  $this->log()->log($e);
               }
 
         }
@@ -63,7 +64,9 @@ class MySqlDb implements Db
         $result = $stmt->execute();
         if (!$result)
         {
-            $this->log()->dbg($stmt->errorInfo());
+            $this->log()->log("execute($sql)");
+            $this->log()->log($args);
+            $this->log()->log($stmt->errorInfo());
         }
         return $result;
     }
@@ -73,16 +76,47 @@ class MySqlDb implements Db
 
     }
 
+    public function get($sql)
+    {
+        $args = func_get_args();
+        $stmt = call_user_func_array(array($this, "prepare"), $args);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\arcane\orm\ResultClass');
+        $stmt->execute();
+        if (!$stmt->errorCode() > 0)
+        {
+            $this->log()->log($sql);
+            $this->log()->log($stmt->errorCode());
+            $this->log()->log($stmt->errorInfo());
+        }
+
+        return $stmt;
+    }
+
     public function fetch($sql)
     {
         $args = func_get_args();
         $stmt = call_user_func_array(array($this, "prepare"), $args);
         $stmt->execute();
-        $result = $stmt->fetchAll();
+        $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
         if (!$result)
         {
-            $this->log()->dbg($sql);
-            $this->log()->dbg($stmt->errorInfo());
+            $this->log()->log($sql);
+            $this->log()->log($stmt->errorInfo());
+        }
+
+        return $result;
+    }
+
+    public function fetchArray($sql)
+    {
+        $args = func_get_args();
+        $stmt = call_user_func_array(array($this, "prepare"), $args);
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_BOTH);
+        if (!$result)
+        {
+            $this->log()->log($sql);
+            $this->log()->log($stmt->errorInfo());
         }
 
         return $result;
@@ -108,6 +142,17 @@ class MySqlDb implements Db
                     if ($this->testParameterName($sql, $name1))
                     {
                         $stmt->bindParam(":{$name1}", $value1);
+                    }
+                }
+            }
+            else if ($value instanceof \arcane\orm\IEntity)
+            {
+                foreach ($value as $name1 => $value1)
+                {
+                    if ($this->testParameterName($sql, $name1))
+                    {
+                        $v = $value1->value();
+                        $stmt->bindParam(":{$name1}", $v);
                     }
                 }
             }
@@ -138,8 +183,8 @@ class MySqlDb implements Db
 
     public function uuid()
     {
-        $r = $this->fetch("SELECT UUID()");
-        return $r ? $r[0][0] : null;
+        $r = $this->fetch("SELECT UUID() AS UUID");
+        return $r ? $r[0]->UUID : null;
     }
 
     public function lastInsertId()

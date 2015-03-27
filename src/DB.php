@@ -24,6 +24,13 @@ class DB
         return call_user_func_array(array($di, "batch"), $args);
     }
 
+    public static function get($mixed)
+    {
+        $args  = func_get_args();
+        $di = self::di();
+        return call_user_func_array(array($di, "get"), $args);
+    }
+
     public static function fetch($mixed)
     {
         $args  = func_get_args();
