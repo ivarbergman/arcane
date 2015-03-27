@@ -34,7 +34,6 @@ class ArcaneLoader extends Psr4AutoloaderClass
         {
             if (is_array($al) && $al[0] instanceof ArcaneLoader)
             {
-                //echo get_class($al[0]) .PHP_EOL;
                 return $al[0];
             }
         }
@@ -42,9 +41,9 @@ class ArcaneLoader extends Psr4AutoloaderClass
 
     }
 
-    public function getPrefix()
+    public function getPrefixes()
     {
-        return $this->prefix;
+        return $this->prefixes;
     }
 
     public function fileToClassname($file)
@@ -66,11 +65,38 @@ class ArcaneLoader extends Psr4AutoloaderClass
         return $this->base_dir;
     }
 
+    /**
+     * Load the mapped file for a namespace prefix and relative class.
+     *
+     * @param string $prefix The namespace prefix.
+     * @param string $relative_class The relative class name.
+     * @return mixed Boolean false if no mapped file can be loaded, or the
+     * name of the mapped file that was loaded.
+     */
+    public function getNamespaceDir($ns)
+    {
+        // are there any base directories for this namespace prefix?
+        if (isset($this->prefixes[$ns]) === false) {
+            return false;
+        }
+
+        // look through base directories for this namespace prefix
+        foreach ($this->prefixes[$ns] as $base_dir) {
+
+            // replace the namespace prefix with the base directory,
+            // replace namespace separators with directory separators
+            // in the relative class name, append with .php
+            return $base_dir;
+        }
+
+        return false;
+    }
+
 
     public function register()
     {
         parent::register();
-        $it = $this->iterator();        
+        $it = $this->iterator();
         foreach ($it as $f)
         {
             $pathname = $f->file()->getPathname();
