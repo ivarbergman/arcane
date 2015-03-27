@@ -9,6 +9,7 @@ class FileLog implements Log
 
     private $file = "/tmp/arcane.log";
     private $fp;
+    private $level = 0;
 
     public function __construct($file = null)
     {
@@ -32,11 +33,21 @@ class FileLog implements Log
         {
             $this->setFile($config['file']);
         }
+        if (isset($config['level']))
+        {
+            $this->setLevel($config['level']);
+        }
     }
 
     public function setFile($file)
     {
+        $this->close();
         $this->file = $file;
+    }
+
+    public function setLevel($level)
+    {
+        $this->level = $level;
     }
 
     public function log($mix)
@@ -54,16 +65,23 @@ class FileLog implements Log
         $this->write($mix, E_USER_NOTICE);
     }
 
+    public function pass($level)
+    {
+        return $level <= $this->level;
+    }
+
     protected function write($mix, $level)
     {
-        $e = new \Exception();
-        $source = $e->getTrace()[1];
+        if ( ! $this->pass($level)) return ;
+
+        $source = (new \Exception)->getTrace()[1];
         $out = $source['file'] . ' ' . $source['line'].' : ';
         $out .= $this->format($mix).PHP_EOL;
         $this->open();
         fwrite($this->fp, $out);
         fflush($this->fp);
         $this->close();
+
     }
 
     protected function isOpen()

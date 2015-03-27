@@ -20,4 +20,9 @@ class Log
         return self::di()->log($mixed);
     }
 
+    public static function error($mixed)
+    {
+        return self::di()->error($mixed);
+    }
+
 }

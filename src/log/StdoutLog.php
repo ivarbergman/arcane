@@ -2,7 +2,7 @@
 
 namespace arcane\log;
 
-class StdLog implements Log
+class StdoutLog implements Log
 {
 
   private $level = 0;
@@ -42,7 +42,7 @@ class StdLog implements Log
     if ( ! $this->pass($level)) return ;
 
     $out = $this->format($mix);
-    trigger_error($out, $level);
+    echo $out . PHP_EOL;
   }
 
   protected function format($mix)
